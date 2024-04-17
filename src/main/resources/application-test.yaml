@@ -1,0 +1,3 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/saaa_aircraft_api_test
