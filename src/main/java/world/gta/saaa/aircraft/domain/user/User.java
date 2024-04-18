@@ -21,6 +21,8 @@ public class User {
     public User(UserDTO data) {
         this.login = data.login();
         this.password = data.password();
+        this.saaa = false;
+        this.admin = false;
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +32,8 @@ public class User {
     private String password;
     private boolean saaa;
     private boolean admin;
+
+    // ManyToMany User and Person
+    // GetAuthority will rely on saaa/admin booleans from role_user to role_staff to role_admin
     
 }
