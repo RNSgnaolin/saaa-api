@@ -28,5 +28,7 @@ public class User {
 
     private String login;
     private String password;
+    private boolean saaa;
+    private boolean admin;
     
 }

@@ -26,7 +26,6 @@ public class AircraftService {
 
     public Aircraft dataToObject(@NonNull AircraftDTO data) {
 
-        @SuppressWarnings("null")
         Person person = personRepository.findById(data.owner()).orElseThrow(EntityNotFoundException::new);
 
         return new Aircraft(
@@ -34,6 +33,7 @@ public class AircraftService {
             data.brand(),
             data.model(),
             data.tailNumber().toUpperCase(),
+            data.callsign().toUpperCase(),
             data.type(),
             person
         );
@@ -42,24 +42,16 @@ public class AircraftService {
 
     public void update(@NonNull Aircraft aircraft, AircraftUpdateDTO data) {
 
-        if (data.brand() != null)
-            aircraft.setBrand(data.brand());
+        data.brand().ifPresent(aircraft::setBrand);
+        data.model().ifPresent(aircraft::setModel);
+        data.tailNumber().ifPresent(aircraft::setTailNumber);
+        data.callsign().ifPresent(aircraft::setCallsign);
+        data.type().ifPresent(aircraft::setType);
 
-        if (data.model() != null)
-            aircraft.setModel(data.model());
-
-        if (data.tailNumber() != null)
-            aircraft.setTailNumber(data.tailNumber());
-
-        if (data.type() != null)
-            aircraft.setType(data.type());
-            
-        if (data.personId() != null) {
-            Person person = personRepository.findById(data.personId()).orElseThrow(EntityNotFoundException::new);
-            aircraft.setOwner(person);
-        }
-        
-        aircraftRepository.save(aircraft);
+        data.personId().ifPresent(person -> {
+            Person newPerson = personRepository.findById(data.personId().get()).orElseThrow(EntityNotFoundException::new);
+            aircraft.setOwner(newPerson);
+        });
 
     }
     

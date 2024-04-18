@@ -11,6 +11,8 @@ public record AircraftDTO(
     String model,
     @NotBlank
     String tailNumber,
+    @NotBlank
+    String callsign,
     @NotNull
     Classification type,
     @NotNull

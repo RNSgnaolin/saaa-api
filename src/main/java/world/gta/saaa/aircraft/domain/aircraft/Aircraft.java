@@ -39,6 +39,8 @@ public class Aircraft {
     @Column(name = "tail_number")
     private String tailNumber;
 
+    private String callsign;
+
     @Enumerated(EnumType.STRING)
     private Classification type;
     
@@ -57,6 +59,9 @@ public class Aircraft {
         return Pattern.matches(
             "^N[1-9]((\\d{0,4})|(\\d{0,3}[A-HJ-NP-Z])|(\\d{0,2}[A-HJ-NP-Z]{2}))$", 
             this.tailNumber
+        ) || Pattern.matches(
+            "^N[1-9]((\\d{0,4})|(\\d{0,3}[A-HJ-NP-Z])|(\\d{0,2}[A-HJ-NP-Z]{2}))$",
+            this.callsign
         );
     }
     

@@ -13,6 +13,7 @@ create table aircrafts(
     brand varchar(50) not null,
     model varchar(50) not null,
     tail_number varchar(10) not null,
+    callsign varchar(20) not null,
     type varchar(50) not null,
     person_id bigint not null,
     
@@ -25,6 +26,8 @@ create table users(
     id bigint not null auto_increment,
     login varchar(50) not null,
     password varchar(50) not null,
+    saaa tinyint not null,
+    admin tinyint not null,
 
     primary key(id)
 );
