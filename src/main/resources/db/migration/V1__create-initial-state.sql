@@ -14,6 +14,8 @@ create table aircrafts(
     model varchar(50) not null,
     tail_number varchar(10) not null,
     callsign varchar(20) not null,
+    pending tinyint not null,
+    active tinyint not null,
     type varchar(50) not null,
     person_id bigint not null,
     

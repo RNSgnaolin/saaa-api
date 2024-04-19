@@ -34,6 +34,8 @@ public class AircraftService {
             data.model(),
             data.tailNumber().toUpperCase(),
             data.callsign().toUpperCase(),
+            true,
+            false,
             data.type(),
             person
         );

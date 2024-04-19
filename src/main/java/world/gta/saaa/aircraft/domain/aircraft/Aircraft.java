@@ -40,6 +40,8 @@ public class Aircraft {
     private String tailNumber;
 
     private String callsign;
+    private boolean pending;
+    private boolean active;
 
     @Enumerated(EnumType.STRING)
     private Classification type;
