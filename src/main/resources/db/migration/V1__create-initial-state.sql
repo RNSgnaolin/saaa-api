@@ -34,3 +34,12 @@ create table users(
     primary key(id)
 );
 
+create table relations(
+    user_id bigint not null,
+    person_id bigint not null,
+
+    primary key(user_id, person_id),
+    constraint fk_relations_user_id foreign key(user_id) references users(id),
+    constraint fk_relations_person_id foreign key(person_id) references persons(id)
+)
+
