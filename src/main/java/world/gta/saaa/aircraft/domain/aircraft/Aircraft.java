@@ -50,13 +50,6 @@ public class Aircraft {
     @JoinColumn(name = "person_id")
     private Person owner;
 
-    public String getEverything() {
-        return this.brand + " " 
-        + this.model + " "
-        + this.tailNumber + " " 
-        + this.getOwner().getName();
-    }
-
     public boolean validTailNumber() {
         return Pattern.matches(
             "^N[1-9]((\\d{0,4})|(\\d{0,3}[A-HJ-NP-Z])|(\\d{0,2}[A-HJ-NP-Z]{2}))$", 

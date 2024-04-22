@@ -27,7 +27,5 @@ public class UserController {
         repository.save(user);
         return ResponseEntity.ok(data);
     }
-
-    // will need to make changes to database as a whole
     
 }

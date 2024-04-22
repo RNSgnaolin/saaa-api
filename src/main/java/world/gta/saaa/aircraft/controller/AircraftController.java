@@ -56,16 +56,6 @@ public class AircraftController {
 
     }
 
-    @GetMapping("/invalid")
-    public ResponseEntity<Page<AircraftListingDTO>> listInvalidAircrafts(Pageable pageable) {
-
-        return ResponseEntity.ok(
-            pageListService.listToPage(aircraftService.getAircraftRepository().findAllIrregularTailNumbers(), pageable)
-            .map(AircraftListingDTO::new)
-        );
-
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<AircraftListingDTO> listAircraftById(@NonNull @PathVariable Long id) {
         return ResponseEntity.ok(
