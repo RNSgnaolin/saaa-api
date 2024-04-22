@@ -2,12 +2,6 @@ package world.gta.saaa.aircraft.controller;
 
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.Arrays;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,9 +40,6 @@ class AircraftControllerTest {
     @Autowired
     private JacksonTester<AircraftListingDTO> aircraftListingJson;
 
-    @Autowired
-    private JacksonTester<List<AircraftListingDTO>> listOfAircraftListingJson;
-
     @MockBean
     private AircraftRepository aircraftRepository;
 
@@ -68,7 +59,6 @@ class AircraftControllerTest {
 
     @Test
     @DisplayName("Should return HTTP Status 201")
-    @SuppressWarnings("null")
     void testRegisterAircraft2() throws Exception {
 
         var data = new AircraftDTO("Brand", "Model", "N156AC", "N156AC", Classification.GOVERNMENT, 1l);
