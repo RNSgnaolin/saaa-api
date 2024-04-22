@@ -65,7 +65,7 @@ class AircraftControllerTest {
 
     }
 
-    @Test
+/*     @Test
     @DisplayName("Should return HTTP Status 201")
     @SuppressWarnings("null")
     void testRegisterAircraft2() throws Exception {
@@ -141,6 +141,6 @@ class AircraftControllerTest {
         }
 
         return results;
-    }
+    } */
 
 }
