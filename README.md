@@ -16,6 +16,7 @@ The front-end counterpart can be found [here](https://github.com/RNSgnaolin/saaa
 * Auth0 JWT 4.4.0
 
 ## ✔️ Deployment
+⚠️ **Still in development. Some functionalities may not be implemented.**
 
 To set up a local environment, use MySQL to create the saaa_aircraft_api database and saaa_aircraft_api_test database. Flyway will take care of schemas as set in [V1__create-initial-state.sql](https://github.com/RNSgnaolin/saaa-api/blob/main/src/main/resources/db/migration/V1__create-initial-state.sql).
 
