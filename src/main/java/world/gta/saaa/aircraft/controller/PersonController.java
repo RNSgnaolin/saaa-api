@@ -2,10 +2,10 @@ package world.gta.saaa.aircraft.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +26,6 @@ import world.gta.saaa.aircraft.domain.person.PersonDTO;
 import world.gta.saaa.aircraft.domain.person.PersonListingDTO;
 import world.gta.saaa.aircraft.domain.person.PersonOptionsDTO;
 import world.gta.saaa.aircraft.domain.person.PersonUpdateDTO;
-import world.gta.saaa.aircraft.service.PageListService;
 import world.gta.saaa.aircraft.service.PersonService;
 
 @RestController
@@ -38,35 +37,32 @@ public class PersonController {
     }
 
     private PersonService personService;
-    private PageListService pageListService = new PageListService();
 
     @GetMapping
-    public ResponseEntity<Page<PersonListingDTO>> findPersonByQuery(Pageable pageable, @RequestParam(value = "query") Optional<String> searchPattern) {
+    public ResponseEntity<Page<PersonListingDTO>> findPersonByQuery(@PageableDefault(size = 10) Pageable pageable, @RequestParam(value = "query") Optional<String> searchPattern) {
 
         if (!searchPattern.isPresent()) {
             return ResponseEntity.ok(
-                pageListService.listToPage(personService.getRepository().findAll(), pageable)
-                .map(PersonListingDTO::new));
+                personService.getRepository()
+                    .findAll(pageable)
+                    .map(p -> new PersonListingDTO(p)));
         }
 
         return ResponseEntity.ok(
-            pageListService.listToPage(
-                personService.getRepository().findByQuery(searchPattern.get()), 
-                pageable)
-            .map(PersonListingDTO::new));
-
+            personService.getRepository()
+                .findByQuery(searchPattern.get(), pageable)
+                .map(p -> new PersonListingDTO(p)));
     }
 
     @GetMapping("/options") 
-    public ResponseEntity<List<PersonOptionsDTO>> findPersonOptions() {
+    public ResponseEntity<List<PersonOptionsDTO>> findPersonOptions(@PageableDefault(size = 10) Pageable pageable) {
 
         return ResponseEntity.ok(
             personService.getRepository()
-                .findPersonOptions()
+                .findPersonOptions(pageable)
                 .stream()
                 .map(PersonOptionsDTO::new)
-                .collect(Collectors.toList())
-        );
+                .toList());
     }
 
     @GetMapping("/{id}")
@@ -74,12 +70,9 @@ public class PersonController {
 
         return ResponseEntity.ok(
             new PersonListingDTO(
-                personService
-                .getRepository()
+                personService.getRepository()
                 .findById(id)
-                .orElseThrow(EntityNotFoundException::new))
-        );
-
+                .orElseThrow(EntityNotFoundException::new)));
     }
 
     @PostMapping("/register")
@@ -89,10 +82,11 @@ public class PersonController {
         Person person = new Person(data);
         personService.getRepository().save(person);
 
-        var uri = uriBuilder.path("/register/{id}").buildAndExpand(person.getId()).toUri();
+        var uri = uriBuilder.path("/register/{id}")
+                    .buildAndExpand(person.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new PersonListingDTO(person));
-
+        return ResponseEntity.created(uri)
+                .body(new PersonListingDTO(person));
     }
 
     @PutMapping("/{id}")

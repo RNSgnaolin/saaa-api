@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,6 @@ import world.gta.saaa.aircraft.domain.aircraft.AircraftDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftListingDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftUpdateDTO;
 import world.gta.saaa.aircraft.service.AircraftService;
-import world.gta.saaa.aircraft.service.PageListService;
 
 @RestController
 @RequestMapping("/aircrafts")
@@ -35,22 +35,22 @@ public class AircraftController {
     }
 
     private AircraftService aircraftService;
-    private PageListService pageListService = new PageListService();
 
     @GetMapping
-    public ResponseEntity<Page<AircraftListingDTO>> listAircrafts(Pageable pageable, @RequestParam(value = "query") Optional<String> searchPattern) {
+    public ResponseEntity<Page<AircraftListingDTO>> listAircrafts(@PageableDefault(size = 10) Pageable pageable, 
+    @RequestParam(value = "query") Optional<String> searchPattern) {
         
         if (!searchPattern.isPresent()) {
 
             return ResponseEntity.ok(
-                pageListService.listToPage(aircraftService.getAircraftRepository().findAll(), pageable)
+                aircraftService.getAircraftRepository().findAll(pageable)
                 .map(AircraftListingDTO::new)
             );
                 
         }
 
         return ResponseEntity.ok(
-            pageListService.listToPage(aircraftService.getAircraftRepository().findByQuery(searchPattern.get()), pageable)
+            aircraftService.getAircraftRepository().findByQuery(searchPattern.get(), pageable)
             .map(AircraftListingDTO::new)
         );
 

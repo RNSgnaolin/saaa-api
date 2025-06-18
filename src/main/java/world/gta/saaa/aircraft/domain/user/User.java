@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import world.gta.saaa.aircraft.domain.relation.Relation;
 
 @Entity(name = "user")
@@ -19,6 +20,7 @@ import world.gta.saaa.aircraft.domain.relation.Relation;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode(of = "id")
 public class User {
 
