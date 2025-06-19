@@ -59,15 +59,15 @@ public class AircraftController {
 
     }
 
-    // Database expected to be below 1,000 aircrafts, therefore in memory filtering is acceptable. 
+    /**
+     * List all illegal aircrafts, i.e. those whose tail number doesn't match the required regex pattern.
+     * Follows the internal logic of the Aircraft object, which checks if the tail number is valid via a boolean.
+     */
     @GetMapping("/illegal")
     public ResponseEntity<Page<AircraftListingDTO>> listIllegalAircrafts(@PageableDefault(size = 10) Pageable pageable) {
 
-        Predicate<Aircraft> illegal = aircraft -> !aircraft.validTailNumber();
-
-        List<AircraftListingDTO> filtered = aircraftService.getAircraftRepository().findByActive()
+        List<AircraftListingDTO> filtered = aircraftService.findIllegalAircrafts()
             .stream()
-            .filter(illegal)
             .map(AircraftListingDTO::new)
             .toList();
 

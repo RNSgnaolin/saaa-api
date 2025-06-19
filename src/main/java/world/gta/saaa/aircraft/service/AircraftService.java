@@ -1,5 +1,8 @@
 package world.gta.saaa.aircraft.service;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -7,6 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import world.gta.saaa.aircraft.domain.aircraft.Aircraft;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftDTO;
+import world.gta.saaa.aircraft.domain.aircraft.AircraftListingDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftRepository;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftUpdateDTO;
 import world.gta.saaa.aircraft.domain.person.Person;
@@ -55,6 +59,16 @@ public class AircraftService {
             aircraft.setOwner(newPerson);
         });
 
+    }
+
+    // Database expected to be below 1,000 aircrafts, therefore in memory filtering is acceptable. 
+    public List<Aircraft> findIllegalAircrafts() {
+
+        Predicate<Aircraft> illegal = aircraft -> !aircraft.validTailNumber();
+        return aircraftRepository.findByActive()
+            .stream()
+            .filter(illegal)
+            .toList();
     }
     
 }
