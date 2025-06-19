@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import world.gta.saaa.aircraft.domain.aircraft.Aircraft;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftDTO;
-import world.gta.saaa.aircraft.domain.aircraft.AircraftListingDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftRepository;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftUpdateDTO;
 import world.gta.saaa.aircraft.domain.person.Person;
@@ -31,7 +30,7 @@ public class AircraftService {
     /**
      * Converts the DTO into an Aircraft object.
      * This method is used when registering a new Aircraft.
-     * It retrieves the owner from the repository using the Perosn ID provided in the DTO.
+     * It retrieves the owner from the repository using the Person ID provided in the DTO.
      */
     public Aircraft dataToObject(@NonNull AircraftDTO data) {
 
