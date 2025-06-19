@@ -108,8 +108,8 @@ class AircraftControllerTest {
             Optional.of("Air Zero"),
             Optional.of(false),
             Optional.of(true),
-            Optional.ofNullable(null),
-            Optional.ofNullable(null)
+            Optional.empty(),
+            Optional.empty()
         );
 
         var expectedJson = aircraftListingJson.write(

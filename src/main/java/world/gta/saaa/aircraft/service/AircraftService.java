@@ -61,7 +61,6 @@ public class AircraftService {
 
     }
 
-    // Database expected to be below 1,000 aircrafts, therefore in memory filtering is acceptable. 
     public List<Aircraft> findIllegalAircrafts() {
 
         Predicate<Aircraft> illegal = aircraft -> !aircraft.validTailNumber();
