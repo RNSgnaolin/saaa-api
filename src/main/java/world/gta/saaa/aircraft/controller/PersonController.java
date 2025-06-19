@@ -38,8 +38,13 @@ public class PersonController {
 
     private PersonService personService;
 
+    /**
+        Retrieves a paginated list of Persons. If a search query is provided, it filters the results based on the query.
+        If no query is provided, it returns all Persons in the repository.
+     */
     @GetMapping
-    public ResponseEntity<Page<PersonListingDTO>> findPersonByQuery(@PageableDefault(size = 10) Pageable pageable, @RequestParam(value = "query") Optional<String> searchPattern) {
+    public ResponseEntity<Page<PersonListingDTO>> findPersonByQuery(@PageableDefault(size = 10) Pageable pageable, 
+    @RequestParam(value = "query") Optional<String> searchPattern) {
 
         if (!searchPattern.isPresent()) {
             return ResponseEntity.ok(
@@ -54,17 +59,35 @@ public class PersonController {
                 .map(p -> new PersonListingDTO(p)));
     }
 
+    /**
+        Retrieves a list of Person options for dropdowns or selection lists.
+        This method is useful for populating UI components with available Persons.
+        The findPersonOptions() method has a limit of 50 results to ensure performance and usability.
+     */
     @GetMapping("/options") 
-    public ResponseEntity<List<PersonOptionsDTO>> findPersonOptions(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<List<PersonOptionsDTO>> findPersonOptions(@RequestParam Optional<String> searchPattern) {
+
+        if (!searchPattern.isPresent()) {
+            return ResponseEntity.ok(
+                personService.getRepository()
+                    .findPersonOptions()
+                    .stream()
+                    .map(PersonOptionsDTO::new)
+                    .toList());
+        }
 
         return ResponseEntity.ok(
             personService.getRepository()
-                .findPersonOptions(pageable)
+                .findPersonOptions(searchPattern.get())
                 .stream()
                 .map(PersonOptionsDTO::new)
                 .toList());
     }
 
+    /**
+     * Retrieves a Person by its ID.
+     * This method is used to fetch detailed information about a specific Person.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<PersonListingDTO> findPersonById(@NonNull @PathVariable Long id) {
 
