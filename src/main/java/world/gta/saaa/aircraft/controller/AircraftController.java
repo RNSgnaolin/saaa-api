@@ -1,8 +1,11 @@
 package world.gta.saaa.aircraft.controller;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +56,23 @@ public class AircraftController {
             aircraftService.getAircraftRepository().findByQuery(searchPattern.get(), pageable)
             .map(AircraftListingDTO::new)
         );
+
+    }
+
+    // Database expected to be below 1,000 aircrafts, therefore in memory filtering is acceptable. 
+    @GetMapping("/illegal")
+    public ResponseEntity<Page<AircraftListingDTO>> listIllegalAircrafts(@PageableDefault(size = 10) Pageable pageable) {
+
+        Predicate<Aircraft> illegal = aircraft -> !aircraft.validTailNumber();
+
+        List<AircraftListingDTO> filtered = aircraftService.getAircraftRepository().findByActive()
+            .stream()
+            .filter(illegal)
+            .map(AircraftListingDTO::new)
+            .toList();
+
+        return ResponseEntity.ok(
+            new PageImpl<>(filtered, pageable, filtered.size()));
 
     }
 
