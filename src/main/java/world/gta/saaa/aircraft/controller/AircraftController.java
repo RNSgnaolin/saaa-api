@@ -2,7 +2,6 @@ package world.gta.saaa.aircraft.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
