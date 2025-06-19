@@ -15,6 +15,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import world.gta.saaa.aircraft.domain.relation.Relation;
 
+/**
+ * Entity representing a User in the system.
+ * This entity is used for user management and authentication.
+ * Spring Security's GetAuthority will rely on the saaa/admin booleans
+ * Still largely unimplemented as far as user management goes.
+ */
 @Entity(name = "user")
 @Table(name = "users")
 @NoArgsConstructor
@@ -42,6 +48,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     public Set<Relation> userRelations;
 
-    // GetAuthority will rely on saaa/admin booleans from role_user to role_staff to role_admin
-    
 }

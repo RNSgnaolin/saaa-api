@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<UserDTO> updateUser(@NonNull @PathVariable Long id, @RequestBody @Valid UserDTO data) {
-        // Ensure the user is logged in before updating
+        // Must ensure the user is logged in before updating
         // Add admin authentication check to change user admin data? Still not sure about public access for API, might block all endpoints
 
         User user = repository.findById(id).orElseThrow(EntityNotFoundException::new);

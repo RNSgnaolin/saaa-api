@@ -39,8 +39,8 @@ public class PersonController {
     private PersonService personService;
 
     /**
-        Retrieves a paginated list of Persons. If a search query is provided, it filters the results based on the query.
-        If no query is provided, it returns all Persons in the repository.
+    * Retrieves a paginated list of Persons. If a search query is provided, it filters the results based on the query.
+    * If no query is provided, it returns all Persons in the repository.
      */
     @GetMapping
     public ResponseEntity<Page<PersonListingDTO>> findPersonByQuery(@PageableDefault(size = 10) Pageable pageable, 
@@ -60,9 +60,9 @@ public class PersonController {
     }
 
     /**
-        Retrieves a list of Person options for dropdowns or selection lists.
-        This method is useful for populating UI components with available Persons.
-        The findPersonOptions() method has a limit of 50 results to ensure performance and usability.
+    * Retrieves a list of Person options for dropdowns or selection lists.
+    * This method is useful for populating UI components with available Persons.
+    * The findPersonOptions() method has a limit of 50 results to ensure performance and usability.
      */
     @GetMapping("/options") 
     public ResponseEntity<List<PersonOptionsDTO>> findPersonOptions(@RequestParam Optional<String> searchPattern) {

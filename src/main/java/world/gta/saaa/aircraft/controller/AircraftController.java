@@ -38,6 +38,10 @@ public class AircraftController {
 
     private AircraftService aircraftService;
 
+    /**
+     * Provides a paginated list of Aircrafts. If a search query is provided, it filters the results based on the query.
+     * If no query is provided, it returns all Aircrafts in the repository.
+     */
     @GetMapping
     public ResponseEntity<Page<AircraftListingDTO>> listAircrafts(@PageableDefault(size = 10) Pageable pageable, 
     @RequestParam(value = "query") Optional<String> searchPattern) {
@@ -75,6 +79,10 @@ public class AircraftController {
 
     }
 
+    /**
+     * Retrieves an Aircraft by its ID.
+     * Used to get more detailed information about a specific Aircraft.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<AircraftListingDTO> listAircraftById(@NonNull @PathVariable Long id) {
         return ResponseEntity.ok(
@@ -85,6 +93,10 @@ public class AircraftController {
             ));
     }
 
+    /**
+     * Updates an existing Aircraft with the provided data.
+     * AircraftService update logic allows for partial updates using Optional fields in the DTO.
+     */
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<AircraftListingDTO> updateAircraft (@RequestBody AircraftUpdateDTO data, @PathVariable @NonNull Long id) {
@@ -96,6 +108,9 @@ public class AircraftController {
     }
 
  
+    /**
+     * Registers a new Aircraft with the provided data.
+     */
     @PostMapping("/register")
     @Transactional
     public ResponseEntity<AircraftListingDTO> registerAircraft(@RequestBody @Valid AircraftDTO data, UriComponentsBuilder uriBuilder) {
