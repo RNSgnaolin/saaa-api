@@ -1,6 +1,10 @@
 package world.gta.saaa.aircraft.controller;
 
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,6 +26,7 @@ import world.gta.saaa.aircraft.domain.aircraft.Aircraft;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftListingDTO;
 import world.gta.saaa.aircraft.domain.aircraft.AircraftRepository;
+import world.gta.saaa.aircraft.domain.aircraft.AircraftUpdateDTO;
 import world.gta.saaa.aircraft.domain.classification.Classification;
 import world.gta.saaa.aircraft.domain.person.Person;
 import world.gta.saaa.aircraft.service.AircraftService;
@@ -36,6 +42,9 @@ class AircraftControllerTest {
 
     @Autowired
     private JacksonTester<AircraftDTO> aircraftDataJson;
+
+    @Autowired
+    private JacksonTester<AircraftUpdateDTO> aircraftUpdateDataJson;
 
     @Autowired
     private JacksonTester<AircraftListingDTO> aircraftListingJson;
@@ -83,6 +92,43 @@ class AircraftControllerTest {
         Assertions.assertThat(response.getContentAsString()).isEqualTo(expectedJson);
 
             
+    }
+
+    @Test
+    @DisplayName("Should return HTTP Status 200")
+    void testUpdateAircraft() throws Exception {
+
+        var personData = new Person(1l, "John Doe", "John Doe", 7518l, null);
+        var aircraft = new Aircraft(1l, "Brand", "Model", "N156AC", "N156AC", false, true, Classification.GOVERNMENT, personData);
+
+        var data = new AircraftUpdateDTO(
+            Optional.of("New Brand"),
+            Optional.of("New Model"),
+            Optional.of("N123AB"),
+            Optional.of("Air Zero"),
+            Optional.of(false),
+            Optional.of(true),
+            Optional.ofNullable(null),
+            Optional.ofNullable(null)
+        );
+
+        var expectedJson = aircraftListingJson.write(
+            new AircraftListingDTO(1l, "New Brand", "New Model", "GOVERNMENT", "N123AB", "Air Zero", "John Doe", true)
+        ).getJson();
+
+        when(aircraftService.getAircraftRepository()).thenReturn(aircraftRepository);
+        when(aircraftService.getAircraftRepository().findById(1l)).thenReturn(Optional.of(aircraft));
+        doCallRealMethod().when(aircraftService).update(aircraft, data);
+
+        var response = mvc.perform(MockMvcRequestBuilders.put("/aircrafts/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(aircraftUpdateDataJson.write(data).getJson()))
+            .andReturn().getResponse();
+
+        aircraftService.update(aircraft, data);
+
+        Assertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        Assertions.assertThat(response.getContentAsString()).isEqualTo(expectedJson);
     }
 
 }
