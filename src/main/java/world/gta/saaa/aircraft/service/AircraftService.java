@@ -28,6 +28,11 @@ public class AircraftService {
     private AircraftRepository aircraftRepository;
     private PersonRepository personRepository;
 
+    /**
+     * Converts the DTO into an Aircraft object.
+     * This method is used when registering a new Aircraft.
+     * It retrieves the owner from the repository using the Perosn ID provided in the DTO.
+     */
     public Aircraft dataToObject(@NonNull AircraftDTO data) {
 
         Person person = personRepository.findById(data.owner()).orElseThrow(EntityNotFoundException::new);
@@ -46,6 +51,11 @@ public class AircraftService {
 
     }
 
+    /**
+     * Updates the given Aircraft object with the provided data.
+     * DTO uses Optional fields to allow partial updates.
+     * If a field is not present in the DTO, it will not be updated.
+     */
     public void update(@NonNull Aircraft aircraft, AircraftUpdateDTO data) {
 
         data.brand().ifPresent(aircraft::setBrand);
@@ -61,6 +71,10 @@ public class AircraftService {
 
     }
 
+    /**
+     * Returns all active aircrafts that have an invalid tail number.
+     * Although it's only used in GET listing at the moment, will return them as an Aircraft object for scalability.
+     */
     public List<Aircraft> findIllegalAircrafts() {
 
         Predicate<Aircraft> illegal = aircraft -> !aircraft.validTailNumber();
